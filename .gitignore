@@ -1,0 +1,4 @@
+node_modules/
+reader-exports/
+.DS_Store
+*.log
