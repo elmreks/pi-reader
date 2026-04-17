@@ -4,7 +4,7 @@
 Build a local pi extension called `reader` that improves reading/exporting assistant responses.
 
 ## Current phase
-Scaffolding and learning phase.
+MVP refinement and package-prep phase.
 Do not jump into broad implementation changes without first checking the project brief and spec.
 
 ## Primary spec
@@ -35,8 +35,9 @@ Source selection rules:
 - Markdown export keeps exact assistant text content
 - HTML export renders markdown for readability
 - Missing model value should be `"unknown"`
-- Filename timestamps use local time
-- Save exported files into `./reader-exports/`
+- Filenames use local date plus a short slug
+- Save exported files into `~/Documents/reader-exports/` by default
+- Export behavior should respect `.pi/reader.json`
 - Temp browser-open files can remain in temp for now
 - Add TODO for future temp cleanup
 
@@ -49,8 +50,9 @@ Source selection rules:
 
 ## Project layout intent
 - `.pi/extensions/reader/` contains the local extension entry point and helpers
+- `.pi/reader.json` contains reader-specific settings
 - `docs/` contains design and implementation notes
-- `reader-exports/` is the default manual drop directory for exports
+- `~/Documents/reader-exports/` is the default manual drop directory for exports
 
 ## Before coding
 1. Read `spec.md`

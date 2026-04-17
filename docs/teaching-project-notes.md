@@ -29,15 +29,16 @@ That means each meaningful step should answer:
 - keep docs practical, not ceremonial
 
 ## Current project status
-Scaffolding is in place.
+The MVP is implemented and actively being refined.
 
 Current files/folders:
 - `spec.md`
 - `AGENTS.md`
 - `.pi/settings.json`
+- `.pi/reader.json`
 - `.pi/extensions/reader/index.ts`
 - `docs/implementation-brief.md`
-- `reader-exports/`
+- `docs/test-fixture.md`
 - `package.json`
 - `tsconfig.json`
 
@@ -84,11 +85,9 @@ It gives us a place for:
 This keeps the extension code type-checked and disciplined.
 Even though pi can run TypeScript directly, type-checking helps us learn the API safely.
 
-#### `reader-exports/`
-This is the manual drop zone for exported files.
-It creates one predictable place for outputs.
-
-That is useful now for manual sorting, and useful later for automation.
+#### `.pi/reader.json`
+This is the reader-specific settings file.
+It gives the project a clean place for user-facing extension settings like export directory and fixture preview behavior.
 
 #### `docs/implementation-brief.md`
 This captures the decisions we already made so they do not stay trapped in chat history.
@@ -192,16 +191,20 @@ A useful way to structure extension work is:
 ## Current implementation status
 The MVP is now implemented in code.
 
-Commands wired:
+User commands wired:
 - `/reader-open`
 - `/reader-export-md`
 - `/reader-export-html`
 
+Dev/test command:
+- `/reader-preview-fixture`
+
 Current module split:
 - `index.ts` for command registration
 - `lib/actions.ts` for top-level command flows
+- `lib/config.ts` for reader settings
 - `lib/session.ts` for message lookup and text extraction
-- `lib/format.ts` for filenames and frontmatter
+- `lib/format.ts` for filenames, slugs, tags, and frontmatter
 - `lib/render.ts` for markdown-to-HTML and page template
 - `lib/files.ts` for export writing and browser opening
 

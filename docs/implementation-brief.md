@@ -1,7 +1,7 @@
 # reader implementation brief
 
-## What we are scaffolding
-This project starts as a **local pi extension** inside this repo.
+## What we are building
+This project is a **local pi extension** inside this repo.
 
 That means:
 - pi can auto-discover it from `.pi/extensions/`
@@ -65,8 +65,12 @@ It also makes the project feel like a normal Node/TS repo.
 We keep decisions, rationale, and future packaging notes out of the code.
 That makes it easier to learn the system while building.
 
-### `reader-exports/`
-This is the manual drop directory for saved `.md` and `.html` exports.
+### `.pi/reader.json`
+This is the reader-specific settings file.
+Right now it controls the export directory and whether the fixture preview command is enabled.
+
+### `~/Documents/reader-exports/`
+This is the default manual drop directory for saved `.md` and `.html` exports.
 Later, you can automate sorting or syncing from one predictable place.
 
 ## Current implementation shape
@@ -92,7 +96,7 @@ For `/reader-export-md`:
 2. find last valid assistant message
 3. extract text parts and join with blank lines
 4. build YAML frontmatter
-5. write to `reader-exports/pi-reader-YYYY-MM-DD-HHmmss.md`
+5. write to the configured export directory using a `pi-msg-YYYY-MM-DD-short-slug.md` filename
 6. notify user of success/failure
 
 For `/reader-export-html`:
@@ -100,7 +104,7 @@ For `/reader-export-html`:
 2. render markdown with `markdown-it`
 3. wrap the HTML in a static document template with inline CSS
 4. include an in-document light/dark theme toggle
-5. write to `reader-exports/pi-reader-YYYY-MM-DD-HHmmss.html`
+5. write to the configured export directory using a `pi-msg-YYYY-MM-DD-short-slug.html` filename
 6. notify user of success/failure
 
 For `/reader-open`:
@@ -120,8 +124,8 @@ Later we can add a `pi` manifest in `package.json` and make it installable as a 
 
 ## TODOs already known
 - run install + type-check in the local environment
-- manually test the three commands inside pi
+- manually test the three user commands inside pi
 - tune HTML typography and spacing from real exports
-- add more reader settings as needed beyond export directory / fixture toggle
+- decide which reader settings should remain user-facing for a package release
 - add temp-file cleanup strategy later
 - package the extension when local behavior feels stable

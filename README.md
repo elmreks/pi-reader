@@ -5,10 +5,12 @@
 ## Current status
 MVP working.
 
-Commands:
+User commands:
 - `/reader-open`
 - `/reader-export-md`
 - `/reader-export-html`
+
+Dev/test command:
 - `/reader-preview-fixture`
 
 ## What it does
@@ -24,10 +26,10 @@ It then:
 
 ## Project structure
 - `.pi/extensions/reader/` — extension code
+- `.pi/reader.json` — reader settings
 - `docs/implementation-brief.md` — implementation decisions
 - `docs/teaching-project-notes.md` — learning/build notes
 - `docs/test-fixture.md` — reusable rendering test content
-- `reader-exports/` — default export directory
 
 ## Local development
 Fast styling loop:
@@ -64,6 +66,16 @@ pi
 - temp browser-open files are currently kept in the system temp directory
 - exports default to `~/Documents/reader-exports/`
 - reader settings live in `.pi/reader.json`
+
+## Configuration
+Example `.pi/reader.json`:
+
+```json
+{
+  "exportDir": "~/Documents/reader-exports",
+  "enableFixtureCommand": true
+}
+```
 
 ## Next areas for refinement
 - text/typography polish
