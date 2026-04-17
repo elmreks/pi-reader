@@ -125,7 +125,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         margin-bottom: 22px;
         padding: 16px 18px;
         border: 1px solid var(--line-soft);
-        border-radius: 10px;
+        border-radius: 5px;
         background: var(--surface);
         backdrop-filter: blur(14px);
       }
@@ -180,7 +180,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         margin: 0;
         padding: 42px 44px;
         border: 1px solid var(--line-soft);
-        border-radius: 10px;
+        border-radius: 5px;
         background: var(--surface);
         box-shadow: var(--shadow);
       }
@@ -253,7 +253,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         font-size: 0.86em;
         letter-spacing: 0.01em;
         padding: 0.14em 0.34em;
-        border-radius: 4px;
+        border-radius: 0;
         background: var(--code-bg);
         color: var(--code-text);
       }
@@ -262,7 +262,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         overflow-x: auto;
         padding: 16px 18px;
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: 4px;
         background: var(--code-bg);
       }
 
@@ -303,7 +303,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
       img {
         max-width: 100%;
         height: auto;
-        border-radius: 6px;
+        border-radius: 3px;
       }
 
       @media (max-width: 720px) {
@@ -322,12 +322,12 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
 
         article {
           padding: 26px 20px;
-          border-radius: 10px;
+          border-radius: 5px;
         }
 
         header {
           padding: 12px 14px;
-          border-radius: 10px;
+          border-radius: 5px;
         }
 
         h1 { font-size: 1.72rem; }
