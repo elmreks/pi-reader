@@ -8,7 +8,6 @@ export type AssistantMessageLike = {
   content: Array<{ type?: string; text?: string }>;
   model?: string;
   stopReason?: string;
-  timestamp?: number;
 };
 
 type BranchEntryLike = {
@@ -20,7 +19,6 @@ type BranchEntryLike = {
 export type ReaderSource = {
   text: string;
   model: string;
-  assistantTimestamp: number | null;
 };
 
 function isTextPart(part: unknown): part is TextPart {
@@ -74,6 +72,5 @@ export function getLastAssistantText(branch: unknown[]): ReaderSource | null {
   return {
     text,
     model: message.model ?? "unknown",
-    assistantTimestamp: typeof message.timestamp === "number" ? message.timestamp : null,
   };
 }

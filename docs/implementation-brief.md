@@ -21,6 +21,7 @@ That means:
 - Filename timestamps: local time
 - Export directory: `./reader-exports/`
 - Temp HTML files: keep for now
+- HTML theme behavior: supports light/dark toggle in the exported document
 - Future work: add temp cleanup after behavior is stable
 
 ## The "one library" idea
@@ -98,8 +99,9 @@ For `/reader-export-html`:
 1. reuse the same message extraction
 2. render markdown with `markdown-it`
 3. wrap the HTML in a static document template with inline CSS
-4. write to `reader-exports/pi-reader-YYYY-MM-DD-HHmmss.html`
-5. notify user of success/failure
+4. include an in-document light/dark theme toggle
+5. write to `reader-exports/pi-reader-YYYY-MM-DD-HHmmss.html`
+6. notify user of success/failure
 
 For `/reader-open`:
 1. reuse the same HTML rendering path

@@ -31,20 +31,64 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
     <title>pi reader</title>
     <style>
       :root {
-        color-scheme: dark;
-        --bg: #0f1113;
-        --surface: rgba(20, 24, 29, 0.84);
-        --surface-2: #1d232b;
-        --surface-3: #14191f;
-        --text: #e6edf3;
-        --muted: #b0b5bd;
-        --line: #2a313a;
-        --line-soft: rgba(255, 255, 255, 0.06);
-        --link: #8ec5ff;
-        --quote: #7dd3a7;
-        --code-bg: #0d1117;
-        --code-text: #d9e2ec;
-        --selection: rgba(142, 197, 255, 0.18);
+        color-scheme: dark light;
+        --bg: #151719;
+        --bg-accent: rgba(96, 110, 128, 0.14);
+        --surface: rgba(23, 25, 28, 0.84);
+        --surface-2: #24272b;
+        --surface-3: #1b1e22;
+        --text: #e7ebef;
+        --muted: #afb4bb;
+        --line: rgba(255, 255, 255, 0.1);
+        --line-soft: rgba(255, 255, 255, 0.07);
+        --link: #69aefc;
+        --quote: #6bbf97;
+        --code-bg: #1b1d21;
+        --code-text: #e0e5ea;
+        --selection: rgba(105, 174, 252, 0.18);
+        --shadow: 0 18px 52px rgba(0, 0, 0, 0.16);
+        --frame-width: 1008px;
+        --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
+        --font-heading: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", sans-serif;
+        --font-code: "SFMono-Regular", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root:not([data-theme="dark"]) {
+          --bg: #f3efe8;
+          --bg-accent: rgba(171, 157, 135, 0.12);
+          --surface: rgba(255, 252, 247, 0.9);
+          --surface-2: #f3ece3;
+          --surface-3: #f7f2eb;
+          --text: #2b2a28;
+          --muted: #7e7871;
+          --line: rgba(68, 56, 42, 0.14);
+          --line-soft: rgba(68, 56, 42, 0.08);
+          --link: #2d74c4;
+          --quote: #4f8f73;
+          --code-bg: #f2ede6;
+          --code-text: #2f2d2b;
+          --selection: rgba(45, 116, 196, 0.14);
+          --shadow: 0 18px 44px rgba(69, 55, 38, 0.08);
+        }
+      }
+
+      :root[data-theme="light"] {
+        --bg: #f3efe8;
+        --bg-accent: rgba(171, 157, 135, 0.12);
+        --surface: rgba(255, 252, 247, 0.9);
+        --surface-2: #f3ece3;
+        --surface-3: #f7f2eb;
+        --text: #2b2a28;
+        --muted: #7e7871;
+        --line: rgba(68, 56, 42, 0.14);
+        --line-soft: rgba(68, 56, 42, 0.08);
+        --link: #2d74c4;
+        --quote: #4f8f73;
+        --code-bg: #f2ede6;
+        --code-text: #2f2d2b;
+        --selection: rgba(45, 116, 196, 0.14);
+        --shadow: 0 18px 44px rgba(69, 55, 38, 0.08);
       }
 
       * { box-sizing: border-box; }
@@ -53,10 +97,10 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         margin: 0;
         padding: 0;
         background:
-          radial-gradient(circle at top, rgba(75, 94, 122, 0.18) 0%, rgba(75, 94, 122, 0) 34%),
-          linear-gradient(180deg, #14181d 0%, var(--bg) 42%);
+          radial-gradient(circle at top, var(--bg-accent) 0%, transparent 34%),
+          linear-gradient(180deg, color-mix(in srgb, var(--bg) 92%, black 8%) 0%, var(--bg) 42%);
         color: var(--text);
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: var(--font-body);
       }
 
       ::selection {
@@ -68,7 +112,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
       }
 
       .shell {
-        max-width: 940px;
+        max-width: var(--frame-width);
         margin: 0 auto;
       }
 
@@ -81,16 +125,15 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         margin-bottom: 22px;
         padding: 16px 18px;
         border: 1px solid var(--line-soft);
-        border-radius: 18px;
+        border-radius: 10px;
         background: var(--surface);
         backdrop-filter: blur(14px);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
       }
 
       .title {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        align-items: center;
+        gap: 18px;
       }
 
       .eyebrow {
@@ -104,6 +147,8 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         display: flex;
         flex-wrap: wrap;
         gap: 8px 14px;
+        align-items: center;
+        justify-content: flex-end;
         color: var(--muted);
         font-size: 14px;
       }
@@ -113,37 +158,56 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         font-weight: 600;
       }
 
+      .theme-toggle {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        padding: 0;
+        font: inherit;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .theme-toggle:hover {
+        color: var(--text);
+      }
+
       article {
-        max-width: 920px;
-        margin: 0 auto;
+        width: 100%;
+        margin: 0;
         padding: 42px 44px;
         border: 1px solid var(--line-soft);
-        border-radius: 24px;
-        background: linear-gradient(180deg, rgba(27, 33, 39, 0.98), rgba(16, 20, 25, 0.99));
-        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
       }
 
       article > :first-child { margin-top: 0; }
       article > :last-child { margin-bottom: 0; }
 
       h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-heading);
         line-height: 1.2;
-        margin: 1.8em 0 0.72em;
+        margin: 1.65em 0 0.76em;
         font-weight: 700;
-        letter-spacing: -0.02em;
+        letter-spacing: 0.036em;
       }
 
-      h1 { font-size: 2.2rem; }
-      h2 { font-size: 1.65rem; }
-      h3 { font-size: 1.3rem; }
+      h1 { font-size: 1.92rem; }
+      h2 { font-size: 1.46rem; }
+      h3 { font-size: 1.18rem; }
 
       p, li, blockquote {
-        font-size: 1.12rem;
-        line-height: 1.5;
+        font-size: 1.05rem;
+        line-height: 1.72;
+        letter-spacing: 0.027em;
       }
 
       p, ul, ol, pre, blockquote, table {
-        margin: 0 0 1em;
+        margin: 0 0 1.12em;
       }
 
       ul, ol {
@@ -160,7 +224,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
       }
 
       li + li {
-        margin-top: 0.35em;
+        margin-top: 0.42em;
       }
 
       a {
@@ -175,17 +239,18 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
       blockquote {
         margin-left: 0;
         padding: 0.35em 0 0.35em 1.1em;
-        border-left: 3px solid rgba(125, 211, 167, 0.45);
-        color: #d4eadc;
-        background: linear-gradient(90deg, rgba(125, 211, 167, 0.08), rgba(125, 211, 167, 0));
+        border-left: 3px solid color-mix(in srgb, var(--quote) 72%, transparent);
+        color: color-mix(in srgb, var(--text) 88%, var(--quote) 12%);
+        background: linear-gradient(90deg, color-mix(in srgb, var(--quote) 10%, transparent), transparent);
       }
 
       code {
-        font-family: "SFMono-Regular", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-        font-size: 0.92em;
-        padding: 0.18em 0.42em;
-        border-radius: 6px;
-        background: rgba(13, 17, 23, 0.95);
+        font-family: var(--font-code);
+        font-size: 0.86em;
+        letter-spacing: 0.01em;
+        padding: 0.14em 0.34em;
+        border-radius: 4px;
+        background: var(--code-bg);
         color: var(--code-text);
       }
 
@@ -193,9 +258,8 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         overflow-x: auto;
         padding: 16px 18px;
         border: 1px solid var(--line);
-        border-radius: 16px;
-        background: linear-gradient(180deg, #0f141b, var(--code-bg));
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+        border-radius: 8px;
+        background: var(--code-bg);
       }
 
       pre code {
@@ -229,13 +293,13 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
       }
 
       tr:nth-child(even) td {
-        background: rgba(255, 255, 255, 0.015);
+        background: color-mix(in srgb, var(--surface-2) 38%, transparent);
       }
 
       img {
         max-width: 100%;
         height: auto;
-        border-radius: 14px;
+        border-radius: 6px;
       }
 
       @media (max-width: 720px) {
@@ -243,18 +307,27 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
           padding: 20px 12px 40px;
         }
 
+        .title,
+        .meta {
+          width: 100%;
+        }
+
+        .meta {
+          justify-content: flex-start;
+        }
+
         article {
           padding: 26px 20px;
-          border-radius: 20px;
+          border-radius: 10px;
         }
 
         header {
           padding: 12px 14px;
-          border-radius: 16px;
+          border-radius: 10px;
         }
 
-        h1 { font-size: 1.9rem; }
-        h2 { font-size: 1.45rem; }
+        h1 { font-size: 1.72rem; }
+        h2 { font-size: 1.32rem; }
       }
     </style>
   </head>
@@ -263,6 +336,7 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
       <header>
         <div class="title">
           <div class="eyebrow">pi reader</div>
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">[Light / Dark]</button>
         </div>
         <div class="meta">
           <span><strong>Exported:</strong> ${safeTimestamp}</span>
@@ -273,6 +347,31 @@ export function buildReaderHtml(contentHtml: string, model: string, timestampLab
         ${contentHtml}
       </article>
     </div>
+    <script>
+      (() => {
+        const storageKey = "pi-reader-theme";
+        const root = document.documentElement;
+        const button = document.querySelector(".theme-toggle");
+        if (!button) return;
+
+        const getSystemTheme = () => window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+
+        const applyTheme = (theme) => {
+          root.dataset.theme = theme;
+          button.textContent = theme === "light" ? "[Light / dark]" : "[Light / Dark]";
+          button.setAttribute("aria-label", theme === "light" ? "Switch to dark mode" : "Switch to light mode");
+        };
+
+        const savedTheme = window.localStorage.getItem(storageKey);
+        applyTheme(savedTheme === "light" || savedTheme === "dark" ? savedTheme : getSystemTheme());
+
+        button.addEventListener("click", () => {
+          const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+          window.localStorage.setItem(storageKey, nextTheme);
+          applyTheme(nextTheme);
+        });
+      })();
+    </script>
   </body>
 </html>
 `;

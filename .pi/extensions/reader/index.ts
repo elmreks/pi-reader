@@ -1,6 +1,6 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-import { runReaderExportHtml, runReaderExportMarkdown, runReaderOpen } from "./lib/actions.js";
+import { runReaderExportHtml, runReaderExportMarkdown, runReaderOpen, runReaderPreviewFixture } from "./lib/actions.js";
 
 export default function readerExtension(pi: ExtensionAPI) {
   pi.registerCommand("reader-open", {
@@ -21,6 +21,13 @@ export default function readerExtension(pi: ExtensionAPI) {
     description: "Export the last completed assistant message as HTML",
     handler: async (_args, ctx) => {
       await runReaderExportHtml(ctx);
+    },
+  });
+
+  pi.registerCommand("reader-preview-fixture", {
+    description: "Open the local test fixture in the reader without waiting for an assistant response",
+    handler: async (_args, ctx) => {
+      await runReaderPreviewFixture(ctx);
     },
   });
 }

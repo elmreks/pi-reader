@@ -9,6 +9,7 @@ Commands:
 - `/reader-open`
 - `/reader-export-md`
 - `/reader-export-html`
+- `/reader-preview-fixture`
 
 ## What it does
 The extension targets the last assistant message on the current branch that:
@@ -29,6 +30,14 @@ It then:
 - `reader-exports/` — default export directory
 
 ## Local development
+Fast styling loop:
+
+```bash
+pi
+/reload
+/reader-preview-fixture
+```
+
 Install dependencies:
 
 ```bash
@@ -51,11 +60,12 @@ pi
 ## Notes
 - HTML output uses `markdown-it`
 - exported HTML is static and dependency-free
+- exported HTML includes a light/dark theme toggle and remembers the chosen theme locally in the browser
 - temp browser-open files are currently kept in the system temp directory
 - export files are written to `./reader-exports/`
 
 ## Next areas for refinement
-- HTML visual polish
+- text/typography polish
 - better testing from real response samples
 - temp-file cleanup strategy
 - eventual packaging as a reusable pi package
