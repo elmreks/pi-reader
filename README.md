@@ -62,7 +62,8 @@ pi
 - exported HTML is static and dependency-free
 - exported HTML includes a light/dark theme toggle and remembers the chosen theme locally in the browser
 - temp browser-open files are currently kept in the system temp directory
-- export files are written to `./reader-exports/`
+- exports default to `~/Documents/reader-exports/`
+- reader settings live in `.pi/reader.json`
 
 ## Next areas for refinement
 - text/typography polish

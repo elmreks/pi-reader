@@ -1,28 +1,43 @@
 import { execFile } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, parse } from "node:path";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
-const EXPORT_DIR_NAME = "reader-exports";
 
-export async function ensureExportDir(cwd: string): Promise<string> {
-  const exportDir = join(cwd, EXPORT_DIR_NAME);
+async function writeUniqueFile(directory: string, fileName: string, content: string): Promise<string> {
+  const { name, ext } = parse(fileName);
+
+  for (let attempt = 0; attempt < 1000; attempt += 1) {
+    const suffix = attempt === 0 ? "" : `-${attempt + 1}`;
+    const candidatePath = join(directory, `${name}${suffix}${ext}`);
+
+    try {
+      await writeFile(candidatePath, content, { encoding: "utf8", flag: "wx" });
+      return candidatePath;
+    } catch (error) {
+      if (!(error instanceof Error) || !("code" in error) || error.code !== "EEXIST") {
+        throw error;
+      }
+    }
+  }
+
+  throw new Error(`Could not create a unique reader file for ${fileName}`);
+}
+
+export async function ensureExportDir(exportDir: string): Promise<string> {
   await mkdir(exportDir, { recursive: true });
   return exportDir;
 }
 
-export async function writeExportFile(cwd: string, fileName: string, content: string): Promise<string> {
-  const exportDir = await ensureExportDir(cwd);
-  const filePath = join(exportDir, fileName);
-  await writeFile(filePath, content, "utf8");
-  return filePath;
+export async function writeExportFile(exportDir: string, fileName: string, content: string): Promise<string> {
+  await ensureExportDir(exportDir);
+  return writeUniqueFile(exportDir, fileName, content);
 }
 
 export async function writeTempHtmlFile(fileName: string, content: string): Promise<string> {
-  const filePath = join(tmpdir(), fileName);
-  await writeFile(filePath, content, "utf8");
+  const filePath = await writeUniqueFile(tmpdir(), fileName, content);
   // TODO: clean up temp reader files after browser-open behavior is stable.
   return filePath;
 }

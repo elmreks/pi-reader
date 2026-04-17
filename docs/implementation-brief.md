@@ -19,7 +19,7 @@ That means:
 - Markdown renderer: `markdown-it`
 - Missing model: `"unknown"`
 - Filename timestamps: local time
-- Export directory: `./reader-exports/`
+- Export directory: `~/Documents/reader-exports/` by default, configurable via `.pi/reader.json`
 - Temp HTML files: keep for now
 - HTML theme behavior: supports light/dark toggle in the exported document
 - Future work: add temp cleanup after behavior is stable
@@ -122,6 +122,6 @@ Later we can add a `pi` manifest in `package.json` and make it installable as a 
 - run install + type-check in the local environment
 - manually test the three commands inside pi
 - tune HTML typography and spacing from real exports
-- decide whether to expose export directory as a setting later
+- add more reader settings as needed beyond export directory / fixture toggle
 - add temp-file cleanup strategy later
 - package the extension when local behavior feels stable

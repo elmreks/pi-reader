@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
+import { loadReaderConfig } from "./config.js";
 import { buildMarkdownDocument, buildReaderFileName, formatTimestampForDisplay } from "./format.js";
 import { openFileInBrowser, writeExportFile, writeTempHtmlFile } from "./files.js";
 import { buildReaderHtml, renderMarkdownToHtml } from "./render.js";
@@ -16,6 +17,7 @@ type ReaderCommandContext = {
   sessionManager: {
     getBranch(): unknown[];
   };
+  announce?(message: string): void;
 };
 
 function getSourceOrNotify(ctx: ReaderCommandContext) {
@@ -49,11 +51,14 @@ export async function runReaderExportMarkdown(ctx: ReaderCommandContext): Promis
 
   try {
     const now = new Date();
-    const fileName = buildReaderFileName("md", now);
+    const config = await loadReaderConfig(ctx.cwd);
+    const fileName = buildReaderFileName("md", now, source.text);
     const content = buildMarkdownDocument(source.text, source.model, now.toISOString());
-    const filePath = await writeExportFile(ctx.cwd, fileName, content);
+    const filePath = await writeExportFile(config.exportDir, fileName, content);
 
-    ctx.ui.notify(`Exported markdown: ${filePath}`, "info");
+    const message = `Exported markdown: ${filePath}`;
+    ctx.ui.notify(message, "info");
+    ctx.announce?.(message);
   } catch (error) {
     ctx.ui.notify(`Failed to export markdown: ${getErrorMessage(error)}`, "error");
   }
@@ -67,11 +72,14 @@ export async function runReaderExportHtml(ctx: ReaderCommandContext): Promise<vo
 
   try {
     const now = new Date();
-    const fileName = buildReaderFileName("html", now);
+    const config = await loadReaderConfig(ctx.cwd);
+    const fileName = buildReaderFileName("html", now, source.text);
     const html = buildReaderDocument(source.text, source.model, now);
-    const filePath = await writeExportFile(ctx.cwd, fileName, html);
+    const filePath = await writeExportFile(config.exportDir, fileName, html);
 
-    ctx.ui.notify(`Exported HTML: ${filePath}`, "info");
+    const message = `Exported HTML: ${filePath}`;
+    ctx.ui.notify(message, "info");
+    ctx.announce?.(message);
   } catch (error) {
     ctx.ui.notify(`Failed to export HTML: ${getErrorMessage(error)}`, "error");
   }
@@ -87,12 +95,14 @@ export async function runReaderOpen(ctx: ReaderCommandContext): Promise<void> {
 
   try {
     const now = new Date();
-    const fileName = buildReaderFileName("html", now);
+    const fileName = buildReaderFileName("html", now, source.text);
     const html = buildReaderDocument(source.text, source.model, now);
     filePath = await writeTempHtmlFile(fileName, html);
     await openFileInBrowser(filePath);
 
-    ctx.ui.notify(`Opened reader in browser: ${filePath}`, "info");
+    const message = `Opened reader in browser: ${filePath}`;
+    ctx.ui.notify(message, "info");
+    ctx.announce?.(message);
   } catch (error) {
     const reason = getErrorMessage(error);
     const suffix = filePath ? ` File saved at: ${filePath}` : "";
@@ -104,14 +114,22 @@ export async function runReaderPreviewFixture(ctx: ReaderCommandContext): Promis
   let filePath = "";
 
   try {
+    const config = await loadReaderConfig(ctx.cwd);
+    if (!config.enableFixtureCommand) {
+      ctx.ui.notify("Fixture preview is disabled in .pi/reader.json", "warning");
+      return;
+    }
+
     const now = new Date();
     const fixtureMarkdown = await loadFixtureMarkdown(ctx.cwd);
-    const fileName = buildReaderFileName("html", now);
+    const fileName = buildReaderFileName("html", now, fixtureMarkdown);
     const html = buildReaderDocument(fixtureMarkdown, "fixture", now);
     filePath = await writeTempHtmlFile(fileName, html);
     await openFileInBrowser(filePath);
 
-    ctx.ui.notify(`Opened fixture preview: ${filePath}`, "info");
+    const message = `Opened fixture preview: ${filePath}`;
+    ctx.ui.notify(message, "info");
+    ctx.announce?.(message);
   } catch (error) {
     const reason = getErrorMessage(error);
     const suffix = filePath ? ` File saved at: ${filePath}` : "";
