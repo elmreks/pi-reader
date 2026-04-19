@@ -1,5 +1,4 @@
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 
 import { loadReaderConfig } from "./config.js";
 import { buildMarkdownDocument, buildReaderFileName, formatTimestampForDisplay } from "./format.js";
@@ -38,9 +37,10 @@ function buildReaderDocument(text: string, model: string, now: Date): string {
   return buildReaderHtml(renderMarkdownToHtml(text), model, formatTimestampForDisplay(now));
 }
 
-async function loadFixtureMarkdown(cwd: string): Promise<string> {
-  const fixturePath = join(cwd, "docs", "test-fixture.md");
-  return readFile(fixturePath, "utf8");
+const FIXTURE_URL = new URL("../../../../docs/test-fixture.md", import.meta.url);
+
+async function loadFixtureMarkdown(): Promise<string> {
+  return readFile(FIXTURE_URL, "utf8");
 }
 
 export async function runReaderExportMarkdown(ctx: ReaderCommandContext): Promise<void> {
@@ -121,7 +121,7 @@ export async function runReaderPreviewFixture(ctx: ReaderCommandContext): Promis
     }
 
     const now = new Date();
-    const fixtureMarkdown = await loadFixtureMarkdown(ctx.cwd);
+    const fixtureMarkdown = await loadFixtureMarkdown();
     const fileName = buildReaderFileName("html", now, fixtureMarkdown);
     const html = buildReaderDocument(fixtureMarkdown, "fixture", now);
     filePath = await writeTempHtmlFile(fileName, html);

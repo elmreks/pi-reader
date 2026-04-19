@@ -1,9 +1,9 @@
 # pi-reader
 
-`reader` is a local pi extension for opening and exporting the most recent completed assistant response in more readable formats.
+`pi-reader` is a pi package for opening and exporting the most recent completed assistant response in more readable formats.
 
 ## Current status
-MVP working.
+MVP working and packaged for pi installation.
 
 User commands:
 - `/reader-open`
@@ -11,7 +11,7 @@ User commands:
 - `/reader-export-html`
 
 Dev/test command:
-- `/reader-preview-fixture`
+- `/reader-preview-fixture` (disabled by default)
 
 ## What it does
 The extension targets the last assistant message on the current branch that:
@@ -30,6 +30,38 @@ It then:
 - `docs/implementation-brief.md` — implementation decisions
 - `docs/teaching-project-notes.md` — learning/build notes
 - `docs/test-fixture.md` — reusable rendering test content
+
+## Install in pi
+
+Install from GitHub:
+
+```bash
+pi install git:github.com/elmreks/pi-reader
+```
+
+Install a pinned release tag:
+
+```bash
+pi install git:github.com/elmreks/pi-reader@v0.1.0
+```
+
+Project-local install instead:
+
+```bash
+pi install git:github.com/elmreks/pi-reader -l
+```
+
+Local checkout install for development:
+
+```bash
+pi install /absolute/path/to/pi-reader
+```
+
+Reload pi after changes during development:
+
+```bash
+/reload
+```
 
 ## Local development
 Fast styling loop:
@@ -66,6 +98,7 @@ pi
 - temp browser-open files are currently kept in the system temp directory
 - exports default to `~/Documents/reader-exports/`
 - reader settings live in `.pi/reader.json`
+- the fixture preview command is off by default and meant for development/testing
 
 ## Configuration
 Example `.pi/reader.json`:
@@ -73,7 +106,7 @@ Example `.pi/reader.json`:
 ```json
 {
   "exportDir": "~/Documents/reader-exports",
-  "enableFixtureCommand": true
+  "enableFixtureCommand": false
 }
 ```
 

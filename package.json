@@ -1,14 +1,41 @@
 {
-  "name": "reader",
+  "name": "pi-reader",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "description": "Local pi extension for reading and exporting assistant responses.",
+  "description": "Pi package for opening and exporting the latest completed assistant response.",
+  "license": "UNLICENSED",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "reader",
+    "markdown",
+    "html"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/elmreks/pi-reader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elmreks/pi-reader/issues"
+  },
+  "homepage": "https://github.com/elmreks/pi-reader#readme",
+  "files": [
+    ".pi/extensions/reader",
+    "docs/test-fixture.md",
+    "README.md"
+  ],
   "scripts": {
     "check": "tsc --noEmit"
   },
+  "pi": {
+    "extensions": [
+      "./.pi/extensions/reader"
+    ]
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*"
+  },
   "dependencies": {
-    "@mariozechner/pi-coding-agent": "*",
     "markdown-it": "^14.1.0"
   },
   "devDependencies": {

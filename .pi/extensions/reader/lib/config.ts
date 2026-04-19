@@ -24,7 +24,7 @@ function expandHomePath(value: string): string {
 export function getDefaultReaderConfig(): ReaderConfig {
   return {
     exportDir: expandHomePath(DEFAULT_EXPORT_DIR),
-    enableFixtureCommand: true,
+    enableFixtureCommand: false,
   };
 }
 
